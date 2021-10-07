@@ -14,7 +14,7 @@ curl 'https://your.3cx.domain/api/login' \
                 -H 'referer: https://your.3cx.domain/' \
                 -H 'accept-language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' \
                 --data-raw '{"Username":"YOURUSERNAME", "Password":"YOURPASSWORD"}' \
-                --compressed -c cookies.txt -b cookies.txt
+                --compressed -c cookies.txt -b cookies.txt \
                 /
 
 curl 'https://your.3cx.domain/api/PhoneBookEntryList/deleteAll' \
@@ -31,11 +31,11 @@ curl 'https://your.3cx.domain/api/PhoneBookEntryList/deleteAll' \
                 -H 'referer: https://your.3cx.domain/' \
                 -H 'accept-language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' \
                 --data-raw '{}' \
-                --compressed -c cookies.txt -b cookies.txt
+                --compressed -c cookies.txt -b cookies.txt \
                 /
 
 curl --form fileInput=@contacts.csv \
                 --form press=submit \
                 https://your.3cx.domain/api/PhoneBookEntryList/import \
-                -b cookies.txt -c cookies.txt
+                -b cookies.txt -c cookies.txt \
                  /
