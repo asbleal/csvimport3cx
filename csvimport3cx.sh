@@ -13,6 +13,29 @@ fi
 
 . $CONFIGFILE
 
+CONTACTS_FILENAME="$(dirname $0)""/contacts.csv"
+# Params parsing
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    # flow-modifying parameters
+    -f|--file-name)
+      [ -z "$2" ] && echo "Missing contacts file name argument" && exit 1
+      CONTACTS_FILENAME=$2
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1." >& 2
+      exit 1
+      ;;
+  esac
+  shift
+done
+if [ ! -f "$CONTACTS_FILENAME" ]; then
+  echo "Contacts CSV '$CONTACTS_FILENAME' not found"
+  exit 1;
+fi
+
+
 echo "Logging in"
 LOGIN=$(curl "$URL3CX/api/login" \
                 -H "authority: $HOST3CX" \
@@ -54,9 +77,9 @@ curl "$URL3CX/api/PhoneBookEntryList/deleteAll" \
                 -o /dev/null \
                 --data-raw '{}' --compressed -c $COOKIESFILENAME -b $COOKIESFILENAME
 
-echo "Importing contacts.csv"
+echo "Importing $CONTACTS_FILENAME"
 curl "$URL3CX/api/PhoneBookEntryList/import" \
-                --form fileInput=@contacts.csv \
+                --form fileInput=@$CONTACTS_FILENAME \
                 --form press=submit \
                 -b $COOKIESFILENAME -c $COOKIESFILENAME
 

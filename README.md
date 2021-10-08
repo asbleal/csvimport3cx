@@ -17,7 +17,8 @@ The script needs `curl` to work, please install it yourself.
 Download `csvimport3cx.sh` and `csvimport3cx.conf-template`. Rename this last
 one to `csvimport3cx.conf` and adjust values to your setup.
 
-Path to your Csvfile: "contacts.csv"
+By default the script will import the file `contacts.csv` located in the same directory
+of the script. This can be overridden by passing `-f` option to the script.
 
 ## Sample run
 
@@ -25,7 +26,7 @@ Path to your Csvfile: "contacts.csv"
 # ./csvimport3cx.sh
 Logging in
 Deleting all contatcs
-Importing contacts.csv
+Importing ./contacts.csv
 {"importCount":713,"ErrorLines":[],"WarningLines":[],"Exception":null,"success":true,"nowarnings":true}
 ```
 
