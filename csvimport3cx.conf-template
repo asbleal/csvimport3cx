@@ -4,3 +4,5 @@ HOST3CX=""
 USERNAME=""
 # 3CX admin pass
 PASSWORD=""
+# Change if not https
+URL3CX="https://$HOST3CX"

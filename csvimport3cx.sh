@@ -1,18 +1,20 @@
 #!/bin/sh
 
+! which "curl" >/dev/null && echo "Error: \"curl\" not found or executable" && exit 1
+
 CONFIGFILE="$(dirname $0)""/csvimport3cx.conf"
+TEMPDIR=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
+COOKIESFILENAME="$TEMPDIR/cookies.txt"
 
 if [ ! -f "$CONFIGFILE" ]; then
   echo "Missing config file $CONFIGFILE"
   exit 1;
 fi
 
-source $CONFIGFILE
-URL3CX="https://$HOST3CX"
-echo $URL3CX
+. $CONFIGFILE
 
 echo "Logging in"
-curl "$URL3CX/api/login" \
+LOGIN=$(curl "$URL3CX/api/login" \
                 -H "authority: $HOST3CX" \
                 -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="92"' \
                 -H 'accept: application/json, text/plain, */*' \
@@ -23,13 +25,18 @@ curl "$URL3CX/api/login" \
                 -H 'sec-fetch-site: same-origin' \
                 -H 'sec-fetch-mode: cors' \
                 -H 'sec-fetch-dest: empty' \
-                -H "referer: $URL3CX" \
+                -H "referer: $URL3CX/" \
                 -H 'accept-language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' \
-                --data-raw "{'Username':""$USERNAME"", 'Password':""$PASSWORD""}" \
-                --compressed -c cookies.txt -b cookies.txt
+                --silent \
+                --data-raw "{'Username':'$USERNAME', 'Password':'$PASSWORD'}" \
+                --compressed -c $COOKIESFILENAME -b $COOKIESFILENAME)
 
-echo $?
-echo "Deleting contatcs"
+if [ ! "$LOGIN" == "AuthSuccess" ]; then
+  echo "Login failed: $LOGIN"
+  exit 2
+fi
+
+echo "Deleting all contatcs"
 curl "$URL3CX/api/PhoneBookEntryList/deleteAll" \
                 -H "authority: $HOST3CX" \
                 -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="92"' \
@@ -41,17 +48,19 @@ curl "$URL3CX/api/PhoneBookEntryList/deleteAll" \
                 -H 'sec-fetch-site: same-origin' \
                 -H 'sec-fetch-mode: cors' \
                 -H 'sec-fetch-dest: empty' \
-                -H "referer: $URL3CX" \
+                -H "referer: $URL3CX/" \
                 -H 'accept-language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' \
-                --data-raw '{}' --compressed -c cookies.txt -b cookies.txt
+                --silent \
+                -o /dev/null \
+                --data-raw '{}' --compressed -c $COOKIESFILENAME -b $COOKIESFILENAME
 
-echo $?
 echo "Importing contacts.csv"
 curl "$URL3CX/api/PhoneBookEntryList/import" \
                 --form fileInput=@contacts.csv \
                 --form press=submit \
-                -b cookies.txt -c cookies.txt
+                -b $COOKIESFILENAME -c $COOKIESFILENAME
 
-echo "Done"
-echo $?
+rm $COOKIESFILENAME
+rmdir $TEMPDIR
+
 exit $?

@@ -8,23 +8,32 @@ Automation of uploading a contactlist in csv format to a 3CX appliance.
 For people like me, which like open formats like "vcf" and organized their contactmanagement this way, there is no other option than to do it manually.
 
 
-## Usage
+## Requirements
 
 The script needs `curl` to work, please install it yourself.
-It also will write a file called "cookies.txt" to save the session details.
-I recommend to put all together in a folder.
 
-Download the csvimport3cx.sh file, change the fields to your needs, make it executable and run it manually or via crontab.
+## Usage
 
-Search in the script for the following fields:
-Domain of your appliance: "your.3cx.domain"
-Administrator-Username: "YOURUSERNAME"
-Administrator-Password: "YOURPASSWORD"
+Download `csvimport3cx.sh` and `csvimport3cx.conf-template`. Rename this last
+one to `csvimport3cx.conf` and adjust values to your setup.
+
 Path to your Csvfile: "contacts.csv"
 
+## Sample run
 
-## Greetings 
+```
+# ./csvimport3cx.sh
+Logging in
+Deleting all contatcs
+Importing contacts.csv
+{"importCount":713,"ErrorLines":[],"WarningLines":[],"Exception":null,"success":true,"nowarnings":true}
+```
+
+## Greetings
 I hope you can use it to make your life easier. :)
-Best Regards, 
+Best Regards.
 
-Alex
+## Authors
+
+* Alex (@asbleal)
+* @maxxer
