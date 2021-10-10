@@ -3,9 +3,6 @@
 ! which "curl" >/dev/null && echo "Error: \"curl\" not found or executable" && exit 1
 
 CONFIGFILE="$(dirname $0)""/csvimport3cx.conf"
-TEMPDIR=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
-COOKIESFILENAME="$TEMPDIR/cookies.txt"
-
 if [ ! -f "$CONFIGFILE" ]; then
   echo "Missing config file $CONFIGFILE"
   exit 1;
@@ -35,6 +32,8 @@ if [ ! -f "$CONTACTS_FILENAME" ]; then
   exit 1;
 fi
 
+TEMPDIR=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
+COOKIESFILENAME="$TEMPDIR/cookies.txt"
 
 echo "Logging in"
 LOGIN=$(curl "$URL3CX/api/login" \
