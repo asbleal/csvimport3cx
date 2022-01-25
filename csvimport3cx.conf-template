@@ -1,0 +1,8 @@
+# 3CX host with port
+HOST3CX=""
+# 3CX admin username
+USERNAME=""
+# 3CX admin pass
+PASSWORD=""
+# Change if not https
+URL3CX="https://$HOST3CX"
