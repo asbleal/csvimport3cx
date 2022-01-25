@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ! which "curl" >/dev/null && echo "Error: \"curl\" not found or executable" && exit 1
 
