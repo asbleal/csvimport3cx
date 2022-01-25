@@ -80,6 +80,7 @@ echo "Importing $CONTACTS_FILENAME"
 curl "$URL3CX/api/PhoneBookEntryList/import" \
                 --form fileInput=@$CONTACTS_FILENAME \
                 --form press=submit \
+                --silent \
                 -b $COOKIESFILENAME -c $COOKIESFILENAME
 
 rm $COOKIESFILENAME
